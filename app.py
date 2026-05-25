@@ -1,50 +1,28 @@
-# Breast Cancer AI Application
-# Add your Python code here
-
-import streamlit as st
-import tensorflow as tf
+import gradio as gr
+import tf_keras as keras
 import numpy as np
+import cv2
+from tf_keras.applications.efficientnet import preprocess_input
 from PIL import Image
+import gdown, os, tensorflow as tf
 
-# Load model
-model = tf.keras.models.load_model("model.h5")
+MODEL_PATH = "model.keras"
+if not os.path.exists(MODEL_PATH):
+    gdown.download(f"https://drive.google.com/uc?id=1oWblhBhZ0ZdkgybXb4qn5I_ik4_MlVwi", MODEL_PATH)
 
-# Title
-st.title("Breast Cancer Detection AI")
+model = keras.models.load_model(MODEL_PATH)
 
-st.write("Upload a histopathology image to detect cancer.")
+def predict(image):
+    img = Image.fromarray(image).resize((96, 96))
+    img_array = preprocess_input(np.expand_dims(np.array(img), axis=0))
+    pred = model.predict(img_array, verbose=0)[0][0]
+    if pred >= 0.5:
+        return f"🔴 Cancer Detected - {pred:.2%}"
+    return f"✅ No Cancer - {(1-pred):.2%}"
 
-# Upload image
-uploaded_file = st.file_uploader("Choose an image", type=["jpg", "png", "jpeg"])
-
-if uploaded_file is not None:
-
-    # Open image
-    image = Image.open(uploaded_file)
-
-    # Show image
-    st.image(image, caption="Uploaded Image", use_column_width=True)
-
-    # Resize image
-    image = image.resize((96, 96))
-
-    # Convert to array
-    img_array = np.array(image)
-
-    # Normalize
-    img_array = img_array / 255.0
-
-    # Add batch dimension
-    img_array = np.expand_dims(img_array, axis=0)
-
-    # Prediction
-    prediction = model.predict(img_array)
-
-    # Result
-    if prediction[0][0] > 0.5:
-        st.error("Cancer Detected")
-    else:
-        st.success("No Cancer Detected")
-
-    # Probability
-    st.write(f"Prediction Score: {prediction[0][0]:.4f}")
+gr.Interface(
+    fn=predict,
+    inputs=gr.Image(),
+    outputs=gr.Text(),
+    title="🩺 Breast Cancer Detection"
+).launch()
