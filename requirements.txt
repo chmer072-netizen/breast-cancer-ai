@@ -1,5 +1,7 @@
-streamlit==1.32.0
-tensorflow==2.15.0
-numpy==1.26.4
-pillow==10.2.0
-pandas==2.2.2
+gradio
+numpy
+opencv-python-headless
+matplotlib
+Pillow
+tf-keras
+gdown
