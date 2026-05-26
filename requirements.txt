@@ -1,7 +1,7 @@
-gradio
+streamlit
+tensorflow
 numpy
+pillow
 opencv-python-headless
 matplotlib
-Pillow
-tf-keras
-gdown
+google-generativeai
