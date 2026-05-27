@@ -1,100 +1,81 @@
 ```python
 import streamlit as st
 from PIL import Image
+import numpy as np
 import random
-import google.generativeai as genai
 
-# ---------------- PAGE CONFIG ----------------
+st.set_page_config(page_title="Breast Cancer AI", layout="centered")
 
-st.set_page_config(
-    page_title="Breast Cancer AI",
-    page_icon="🩺",
-    layout="centered"
-)
-
-# ---------------- GEMINI API ----------------
-
-genai.configure(api_key="AIzaSyA0WMXWReh3HnfhDpphyj1m1l4u0tx850g")
-
-chat_model = genai.GenerativeModel("gemini-1.5-flash")
-
-# ---------------- TITLE ----------------
-
-st.title("🩺 Breast Cancer AI Assistant")
-
-st.write(
-    "AI system for breast cancer histopathology analysis and medical assistance."
-)
-
-# ---------------- IMAGE UPLOAD ----------------
+st.title("🩺 Breast Cancer Detection AI")
+st.write("Upload a histopathology image for AI analysis.")
 
 uploaded_file = st.file_uploader(
-    "Upload Histopathology Image",
+    "Choose an image",
     type=["jpg", "jpeg", "png"]
 )
-
-# ---------------- PREDICTION ----------------
 
 if uploaded_file is not None:
 
     image = Image.open(uploaded_file)
 
-    st.image(
-        image,
-        caption="Uploaded Image",
-        use_container_width=True
-    )
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    st.subheader("AI Detection Result")
+    st.subheader("🔍 AI Analysis")
 
+    # Fake prediction for demo
     prediction = random.choice(["Benign", "Malignant"])
 
-    confidence = round(random.uniform(92, 99), 2)
+    confidence = random.randint(85, 99)
 
     if prediction == "Malignant":
         st.error(f"Prediction: {prediction}")
     else:
         st.success(f"Prediction: {prediction}")
 
-    st.write(f"Confidence Score: {confidence}%")
+    st.write(f"Confidence: {confidence}%")
 
-    st.warning(
-        "This AI system is for research and educational purposes only. "
-        "Always consult medical professionals."
-    )
+    st.subheader("💡 Medical Advice")
 
-# ---------------- CHATBOT ----------------
+    if prediction == "Malignant":
+        st.warning("""
+        The AI detected possible cancer indicators.
+        
+        Please consult a medical specialist for further diagnosis.
+        Early detection can save lives.
+        """)
+    else:
+        st.info("""
+        No strong cancer indicators were detected.
+        
+        Continue regular medical checkups.
+        """)
 
-st.divider()
+st.sidebar.title("🤖 AI Chatbot")
 
-st.subheader("🤖 Medical AI Chatbot")
-
-question = st.text_input(
-    "Ask a medical question"
-)
+question = st.sidebar.text_input("Ask a medical question")
 
 if question:
 
-    prompt = f"""
-    You are a professional medical AI assistant specialized in breast cancer.
+    answer = {
+        "what is breast cancer":
+        "Breast cancer is a disease where abnormal cells grow in breast tissue.",
 
-    Answer clearly and professionally.
-    Keep answers concise and understandable for patients.
+        "symptoms":
+        "Common symptoms include lumps, breast pain, skin changes, and nipple discharge.",
 
-    Question:
-    {question}
-    """
+        "treatment":
+        "Treatments may include surgery, chemotherapy, radiotherapy, and immunotherapy."
+    }
 
-    response = chat_model.generate_content(prompt)
+    found = False
 
-    st.write(response.text)
+    for key in answer:
+        if key in question.lower():
+            st.sidebar.success(answer[key])
+            found = True
 
-# ---------------- FOOTER ----------------
-
-st.divider()
-
-st.caption(
-    "Developed using AI, Deep Learning, and Medical Imaging."
-)
+    if not found:
+        st.sidebar.info(
+            "Please consult a healthcare professional for accurate medical advice."
+        )
 ```
-
