@@ -1,8 +1,5 @@
 streamlit
-numpy==1.26.4
-pillow==10.2.0
-google-generativeai
-opencv-python-headless
-matplotlib
+numpy
+pillow
 
 
