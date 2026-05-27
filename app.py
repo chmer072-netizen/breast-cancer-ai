@@ -1,5 +1,6 @@
 import streamlit as st
-
+from tensorflow.keras.models import load_model
+model = load_model("model.h5")
 # =========================
 # PAGE CONFIG
 # =========================
@@ -8,7 +9,37 @@ st.set_page_config(
     page_icon="🔬",
     layout="centered"
 )
+st.header("🔬 Breast Cancer Prediction")
 
+uploaded_file = st.file_uploader(
+    "Upload a histopathology image",
+    type=["jpg", "jpeg", "png"]
+)
+
+if uploaded_file is not None:
+
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
+
+    st.write("⏳ Analyzing image...")
+
+    # تحويل الصورة
+    img = image.resize((96, 96))
+    img_array = np.array(img)
+
+    if img_array.shape[-1] == 4:
+        img_array = img_array[:, :, :3]
+
+    img_array = img_array / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+
+    # prediction
+    prediction = model.predict(img_array)[0][0]
+
+    if prediction > 0.5:
+        st.error(f"⚠️ Cancer Detected ({prediction*100:.2f}%)")
+    else:
+        st.success(f"✅ Normal Tissue ({(1-prediction)*100:.2f}%)")
 # =========================
 # TITLE
 # =========================
