@@ -1,14 +1,10 @@
-
 import streamlit as st
-from PIL import Image
-import numpy as np
 
 # =========================
 # PAGE CONFIG
 # =========================
-
 st.set_page_config(
-    page_title="Breast Cancer Detection AI🤖",
+    page_title="Breast Cancer AI Assistant",
     page_icon="🔬",
     layout="centered"
 )
@@ -16,237 +12,156 @@ st.set_page_config(
 # =========================
 # TITLE
 # =========================
-st.image("logo.png", width=120)
-st.title("🔬 Breast Cancer Detection AI")
-st.write("Upload a histopathology image for AI analysis.")
+st.markdown("<h1 style='text-align: center; color: #ff4da6;'>🎗️ Breast Cancer AI Assistant 🤖</h1>", unsafe_allow_html=True)
+
+st.write("Ask any medical question about breast cancer, diagnosis, treatment, or prevention.")
 
 # =========================
-# IMAGE UPLOAD
+# QUESTIONS & ANSWERS
 # =========================
+questions_responses = {
 
-uploaded_file = st.file_uploader(
-    "Choose an image",
-    type=["jpg", "jpeg", "png", "tif", "tiff"]
-)
+    "what is breast cancer":
+    "Breast cancer is a disease where abnormal cells grow uncontrollably in breast tissue. Early detection greatly improves treatment success.",
+
+    "what are the symptoms of breast cancer":
+    "Common symptoms include a lump in the breast, changes in breast shape, nipple discharge, skin dimpling, breast pain, or redness.",
+
+    "what is chemotherapy":
+    "Chemotherapy is a cancer treatment that uses strong drugs to destroy cancer cells or stop their growth.",
+
+    "what is radiotherapy":
+    "Radiotherapy uses high-energy radiation to kill cancer cells and shrink tumors.",
+
+    "what is immunotherapy":
+    "Immunotherapy helps the immune system recognize and attack cancer cells more effectively.",
+
+    "what is a biopsy":
+    "A biopsy is a medical procedure where doctors remove a small tissue sample to examine it for cancer cells under a microscope.",
+
+    "why is early detection important":
+    "Early detection increases the chances of successful treatment, reduces complications, and improves survival rates.",
+
+    "how can breast cancer be detected":
+    "Breast cancer can be detected using mammograms, biopsies, MRI scans, ultrasound imaging, and AI-assisted histopathology analysis.",
+
+    "can breast cancer be cured":
+    "Many breast cancer cases can be successfully treated, especially when detected early.",
+
+    "what causes breast cancer":
+    "Breast cancer may be caused by genetic mutations, hormonal factors, lifestyle habits, age, obesity, smoking, and family history.",
+
+    "what are the risk factors of breast cancer":
+    "Risk factors include age, family history, obesity, smoking, alcohol consumption, genetic mutations, and hormonal exposure.",
+
+    "what is a mammogram":
+    "A mammogram is an X-ray imaging test used to detect abnormalities or tumors in breast tissue.",
+
+    "what is metastasis":
+    "Metastasis occurs when cancer cells spread from the original tumor to other parts of the body.",
+
+    "what are benign tumors":
+    "Benign tumors are non-cancerous growths that usually do not spread to other tissues.",
+
+    "what are malignant tumors":
+    "Malignant tumors are cancerous growths that can invade nearby tissues and spread to other organs.",
+
+    "how does ai help detect breast cancer":
+    "AI can analyze medical images and histopathology slides to identify cancer patterns quickly and assist doctors in diagnosis.",
+
+    "what is histopathology":
+    "Histopathology is the microscopic examination of tissue samples to detect diseases such as cancer.",
+
+    "what are cancer cells":
+    "Cancer cells are abnormal cells that divide uncontrollably and may spread to other body parts.",
+
+    "what is targeted therapy":
+    "Targeted therapy uses drugs that specifically attack cancer-related molecules while minimizing damage to healthy cells.",
+
+    "how can breast cancer be prevented":
+    "Maintaining a healthy lifestyle, regular screenings, exercise, and avoiding smoking or excessive alcohol may reduce risk.",
+
+    "can men get breast cancer":
+    "Yes, although rare, men can also develop breast cancer.",
+
+    "what is tumor staging":
+    "Tumor staging describes the size of cancer and whether it has spread in the body.",
+
+    "what is stage 1 breast cancer":
+    "Stage 1 breast cancer is an early stage where the tumor is small and has limited spread.",
+
+    "what is stage 4 breast cancer":
+    "Stage 4 breast cancer means the cancer has spread to distant organs such as bones, lungs, liver, or brain.",
+
+    "what is precision":
+    "Precision measures how many predicted positive cases were actually positive.",
+
+    "what is recall":
+    "Recall measures how many actual positive cases were correctly detected by the AI model.",
+
+    "what is accuracy":
+    "Accuracy measures the percentage of correct predictions made by the AI model.",
+
+    "what is auc roc":
+    "AUC-ROC evaluates the performance of a classification model by measuring its ability to distinguish classes.",
+
+    "what is deep learning":
+    "Deep learning is a branch of artificial intelligence that uses neural networks to learn patterns from data.",
+
+    "what is cnn":
+    "CNN stands for Convolutional Neural Network, a deep learning model commonly used for image analysis.",
+
+    "what is grad cam":
+    "Grad-CAM is a visualization technique that highlights image regions influencing AI predictions.",
+
+    "how accurate is ai in cancer detection":
+    "AI models can achieve high accuracy in cancer detection when trained on high-quality medical datasets.",
+
+    "what is medical imaging":
+    "Medical imaging refers to technologies used to visualize the inside of the body for diagnosis and treatment.",
+
+    "what is pathology":
+    "Pathology is the medical specialty that studies diseases through laboratory examination of tissues and cells."
+}
 
 # =========================
-# IMAGE ANALYSIS
+# CHATBOT
 # =========================
-
-if uploaded_file is not None:
-
-    image = Image.open(uploaded_file)
-
-    st.image(
-        image,
-        caption="Uploaded Histopathology Image",
-        use_container_width=True
-    )
-
-    st.write("🔬 Running AI analysis...")
-
-    # Fake prediction demo
-    prediction = np.random.rand()
-
-    if prediction > 0.5:
-        st.error("⚠️ Prediction: Malignant (Cancer Detected)")
-        confidence = prediction * 100
-    else:
-        st.success("✅ Prediction: Benign (Non-Cancerous)")
-        confidence = (1 - prediction) * 100
-
-    st.write(f"Confidence Score: {confidence:.2f}%")
-
-# =========================
-# CHATBOT SECTION
-# =========================
-
-st.divider()
-
-st.subheader("🤖 Medical AI Assistant")
+st.subheader("🤖 AI Medical Assistant")
 
 user_question = st.text_input("Ask a medical question:")
 
 if user_question:
 
-    q = user_question.lower()
+    cleaned_question = (
+        user_question.lower()
+        .strip()
+        .replace('"', '')
+        .replace("'", "")
+        .replace("?", "")
+    )
 
-    # =========================
-    # QUESTIONS & ANSWERS
-    # =========================
+    found = False
 
-    if "breast cancer" in q:
-        response = """
-Breast cancer is a disease where abnormal cells grow uncontrollably in breast tissue.
+    for question, answer in questions_responses.items():
 
-It is one of the most common cancers in women. Early detection can significantly improve treatment success and survival rates.
-"""
+        clean_db_question = (
+            question.lower()
+            .strip()
+            .replace("?", "")
+        )
 
-    elif "symptoms" in q:
-        response = """
-Common breast cancer symptoms include:
+        if cleaned_question == clean_db_question:
+            st.success(answer)
+            found = True
+            break
 
-• Lump in the breast
-• Changes in breast shape
-• Skin dimpling
-• Nipple discharge
-• Breast pain
-• Redness or swelling
+    if not found:
+        st.warning("Sorry, I do not have an answer for this question yet.")
 
-Some patients may not show symptoms during early stages.
-"""
+# =========================
+# FOOTER
+# =========================
+st.markdown("---")
+st.caption("⚠️ This AI system is designed for educational and research purposes only.")
 
-    elif "early detection" in q:
-        response = """
-Early detection is extremely important because it increases survival rates and improves treatment effectiveness.
-
-Detecting cancer at an early stage helps doctors begin treatment before the disease spreads.
-"""
-
-    elif "biopsy" in q:
-        response = """
-A biopsy is a medical procedure where doctors remove a small tissue sample for laboratory analysis.
-
-The tissue is examined under a microscope to determine whether cancer cells are present.
-"""
-
-    elif "chemotherapy" in q or "chemo" in q:
-        response = """
-Chemotherapy is a treatment that uses powerful drugs to destroy cancer cells or stop their growth.
-
-It may be used before surgery, after surgery, or in advanced cancer stages.
-"""
-
-    elif "radiotherapy" in q or "radiation" in q:
-        response = """
-Radiotherapy uses high-energy radiation to destroy cancer cells.
-
-It is commonly used after surgery to reduce the risk of cancer recurrence.
-"""
-
-    elif "tumor" in q:
-        response = """
-A tumor is an abnormal growth of cells.
-
-Tumors can be:
-• Benign (non-cancerous)
-• Malignant (cancerous)
-"""
-
-    elif "malignant" in q:
-        response = """
-Malignant tumors are cancerous tumors that can invade nearby tissues and spread to other parts of the body.
-"""
-
-    elif "benign" in q:
-        response = """
-Benign tumors are non-cancerous growths that usually do not spread to other parts of the body.
-"""
-
-    elif "metastasis" in q:
-        response = """
-Metastasis is the spread of cancer cells from the original tumor to other organs or tissues in the body.
-"""
-
-    elif "ai" in q or "artificial intelligence" in q:
-        response = """
-Artificial Intelligence in healthcare helps doctors analyze medical images, detect patterns, and improve diagnostic accuracy.
-
-AI can support early breast cancer detection using histopathology images.
-"""
-
-    elif "histopathology" in q:
-        response = """
-Histopathology is the microscopic examination of tissue samples to study disease and detect abnormal cancer cells.
-"""
-
-    elif "mammography" in q or "mammogram" in q:
-        response = """
-Mammography is a medical imaging technique using low-dose X-rays to detect breast abnormalities and possible cancer.
-"""
-
-    elif "prevention" in q:
-        response = """
-Breast cancer prevention strategies may include:
-
-• Healthy lifestyle
-• Regular screening
-• Physical activity
-• Avoiding smoking
-• Maintaining healthy weight
-"""
-
-    elif "treatment" in q:
-        response = """
-Breast cancer treatments may include:
-
-• Surgery
-• Chemotherapy
-• Radiotherapy
-• Hormone therapy
-• Targeted therapy
-"""
-
-    elif "stage" in q:
-        response = """
-Cancer stages describe how far cancer has spread in the body.
-
-Stages usually range from Stage 0 to Stage IV.
-"""
-
-    elif "survival rate" in q:
-        response = """
-Survival rates are generally higher when breast cancer is detected early and treated quickly.
-"""
-
-    elif "doctor" in q:
-        response = """
-Doctors use medical imaging, biopsy analysis, laboratory tests, and patient history to diagnose breast cancer accurately.
-"""
-
-    elif "dataset" in q:
-        response = """
-A dataset is a collection of medical images or data used to train and evaluate Artificial Intelligence models.
-"""
-
-    elif "deep learning" in q:
-        response = """
-Deep Learning is a branch of Artificial Intelligence that uses neural networks to automatically learn patterns from medical images and data.
-"""
-
-    elif "cnn" in q:
-        response = """
-CNN (Convolutional Neural Network) is a Deep Learning model specialized in image analysis and medical image classification.
-"""
-
-    elif "accuracy" in q:
-        response = """
-Accuracy measures how correctly the AI model predicts cancer and non-cancer cases.
-"""
-
-    elif "grad cam" in q or "gradcam" in q:
-        response = """
-Grad-CAM is an explainable AI technique that highlights important regions in medical images used by the model for prediction.
-"""
-
-    else:
-        response = """
-I can answer questions about:
-
-• Breast cancer
-• Biopsy
-• Chemotherapy
-• Histopathology
-• AI detection
-• Deep Learning
-• CNN
-• Grad-CAM
-• Symptoms
-• Treatment
-• Prevention
-"""
-
-    st.write("🤖 AI Assistant")
-    st.success(response)
-
-    st.caption("⚠️ This AI system is designed for educational and research purposes only.")
