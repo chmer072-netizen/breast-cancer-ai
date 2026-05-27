@@ -5,3 +5,4 @@ pillow==10.2.0
 google-generativeai
 opencv-python-headless
 matplotlib
+h5py
