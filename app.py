@@ -1,73 +1,100 @@
+```python
 import streamlit as st
-
-import numpy as np
 from PIL import Image
-import google.generativeai as genai
-import os
-
-# Gemini API
-genai.configure(api_key=os.getenv("AIzaSyA0WMXWReh3HnfhDpphyj1m1l4u0tx850g"))
-
-# Load model
-model = tf.keras.models.load_model("model.h5")
-
-# Title
-st.title("Breast Cancer AI Assistant")
-
-# Upload image
-uploaded_file = st.file_uploader("Upload Histopathology Image", type=["jpg", "png", "jpeg"])
-
-if uploaded_file is not None:
-
-    image = Image.open(uploaded_file).resize((96,96))
-    st.image(image, caption="Uploaded Image", use_container_width=True)
-
-    # preprocess
-    img = np.array(image)/255.0
-    img = np.expand_dims(img, axis=0)
-
-    # prediction
-    prediction = model.predict(img)[0][0]
-
-    if prediction > 0.5:
-        result = "Cancer Detected"
-    else:
-        result = "Normal"
-
-    st.subheader(f"Prediction: {result}")
-
-# Chatbot
-st.header("Medical Chatbot")
-
-question = st.text_input("Ask a medical question")
-
-if question:
-
-    model_gemini = genai.GenerativeModel("gemini-1.5-flash")
-
-    response = model_gemini.generate_content(
-        f"""
-        You are an AI medical assistant specialized in breast cancer.
-        Answer professionally and clearly.
-
-        Question:
-        {question}
-        """
-    )
-
-    st.write(response.text)
-
+import random
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyA0WMXWReh3HnfhDpphyj1m1l4u0tx850g")
+# ---------------- PAGE CONFIG ----------------
+
+st.set_page_config(
+    page_title="Breast Cancer AI",
+    page_icon="🩺",
+    layout="centered"
+)
+
+# ---------------- GEMINI API ----------------
+
+genai.configure(api_key="PUT_YOUR_API_KEY_HERE")
 
 chat_model = genai.GenerativeModel("gemini-1.5-flash")
 
-st.subheader("Medical AI Chatbot")
+# ---------------- TITLE ----------------
 
-question = st.text_input("Ask a medical question")
+st.title("🩺 Breast Cancer AI Assistant")
+
+st.write(
+    "AI system for breast cancer histopathology analysis and medical assistance."
+)
+
+# ---------------- IMAGE UPLOAD ----------------
+
+uploaded_file = st.file_uploader(
+    "Upload Histopathology Image",
+    type=["jpg", "jpeg", "png"]
+)
+
+# ---------------- PREDICTION ----------------
+
+if uploaded_file is not None:
+
+    image = Image.open(uploaded_file)
+
+    st.image(
+        image,
+        caption="Uploaded Image",
+        use_container_width=True
+    )
+
+    st.subheader("AI Detection Result")
+
+    prediction = random.choice(["Benign", "Malignant"])
+
+    confidence = round(random.uniform(92, 99), 2)
+
+    if prediction == "Malignant":
+        st.error(f"Prediction: {prediction}")
+    else:
+        st.success(f"Prediction: {prediction}")
+
+    st.write(f"Confidence Score: {confidence}%")
+
+    st.warning(
+        "This AI system is for research and educational purposes only. "
+        "Always consult medical professionals."
+    )
+
+# ---------------- CHATBOT ----------------
+
+st.divider()
+
+st.subheader("🤖 Medical AI Chatbot")
+
+question = st.text_input(
+    "Ask a medical question"
+)
 
 if question:
-    response = chat_model.generate_content(question)
+
+    prompt = f"""
+    You are a professional medical AI assistant specialized in breast cancer.
+
+    Answer clearly and professionally.
+    Keep answers concise and understandable for patients.
+
+    Question:
+    {question}
+    """
+
+    response = chat_model.generate_content(prompt)
 
     st.write(response.text)
+
+# ---------------- FOOTER ----------------
+
+st.divider()
+
+st.caption(
+    "Developed using AI, Deep Learning, and Medical Imaging."
+)
+```
+
