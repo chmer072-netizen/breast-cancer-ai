@@ -63,7 +63,7 @@ if uploaded_file is not None:
 
 st.divider()
 
-st.subheader("💬 Medical AI Assistant")
+st.subheader("🤖 Medical AI Assistant")
 
 user_question = st.text_input("Ask a medical question:")
 
