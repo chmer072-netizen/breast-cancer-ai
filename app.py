@@ -8,7 +8,7 @@ import numpy as np
 # =========================
 
 st.set_page_config(
-    page_title="Breast Cancer Detection AI⚕️",
+    page_title="Breast Cancer Detection AI🤖",
     page_icon="🔬",
     layout="centered"
 )
