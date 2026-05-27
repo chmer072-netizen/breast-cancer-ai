@@ -56,3 +56,18 @@ if question:
     )
 
     st.write(response.text)
+
+import google.generativeai as genai
+
+genai.configure(api_key="YOUR_API_KEY")
+
+chat_model = genai.GenerativeModel("gemini-1.5-flash")
+
+st.subheader("Medical AI Chatbot")
+
+question = st.text_input("Ask a medical question")
+
+if question:
+    response = chat_model.generate_content(question)
+
+    st.write(response.text)
