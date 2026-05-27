@@ -9,10 +9,13 @@ st.set_page_config(page_title="Breast Cancer AI", layout="centered")
 st.title("🩺 Breast Cancer Detection AI")
 st.write("Upload a histopathology image for AI analysis.")
 
+
 uploaded_file = st.file_uploader(
     "Choose an image",
-    type=["jpg", "jpeg", "png"]
+    type=["jpg", "jpeg", "png", "tif", "tiff"]
 )
+
+
 
 if uploaded_file is not None:
 
