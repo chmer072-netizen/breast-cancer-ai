@@ -30,7 +30,7 @@ st.header("🔬 Breast Cancer Prediction")
 
 uploaded_file = st.file_uploader(
     "Upload a histopathology image",
-    type=["jpg", "jpeg", "png"]
+    type=["jpg", "jpeg", "png", "tif"]
 )
 
 if uploaded_file is not None:
