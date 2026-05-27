@@ -9,7 +9,7 @@ import numpy as np
 
 st.set_page_config(
     page_title="Breast Cancer Detection AI⚕️",
-    page_icon="🩺",
+    page_icon="🔬",
     layout="centered"
 )
 
@@ -17,7 +17,7 @@ st.set_page_config(
 # TITLE
 # =========================
 
-st.title("🩺 Breast Cancer Detection AI")
+st.title("🔬 Breast Cancer Detection AI")
 st.write("Upload a histopathology image for AI analysis.")
 
 # =========================
