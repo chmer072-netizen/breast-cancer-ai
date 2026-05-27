@@ -59,7 +59,7 @@ if question:
 
 import google.generativeai as genai
 
-genai.configure(api_key="YOUR_API_KEY")
+genai.configure(api_key="AIzaSyA0WMXWReh3HnfhDpphyj1m1l4u0tx850g")
 
 chat_model = genai.GenerativeModel("gemini-1.5-flash")
 
