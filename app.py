@@ -16,7 +16,7 @@ st.set_page_config(
 # =========================
 # TITLE
 # =========================
-st.image("logo.png.tif", width=120)
+st.image("logo.png", width=120)
 st.title("🔬 Breast Cancer Detection AI")
 st.write("Upload a histopathology image for AI analysis.")
 
