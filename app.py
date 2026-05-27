@@ -1,5 +1,4 @@
 
-```python
 import streamlit as st
 from PIL import Image
 import numpy as np
@@ -251,4 +250,3 @@ I can answer questions about:
     st.success(response)
 
     st.caption("⚠️ This AI system is designed for educational and research purposes only.")
-```
