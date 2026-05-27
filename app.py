@@ -1,4 +1,4 @@
-```python
+
 import streamlit as st
 from PIL import Image
 import numpy as np
@@ -78,4 +78,4 @@ if question:
         st.sidebar.info(
             "Please consult a healthcare professional for accurate medical advice."
         )
-```
+
